@@ -1,0 +1,15 @@
+{
+    "source": "github",
+    "owner": "CalinSalagean",
+    "name": "hb-module",
+    "dependencies": [
+        "/main.js",
+        "http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"
+    ],
+    "operations": [
+        { "file": "operations.js", "function": "index" },
+        { "file": "operations.js", "function": "show" },
+        { "file": "operations.js", "function": "edit" },
+        { "file": "operations.js", "function": "transfer" }
+    ]
+}
