@@ -1,4 +1,4 @@
-model = require('./model.js');
+var model = require('./model.js');
 
 exports.index = function (link) {
     if (!link.data) {

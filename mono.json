@@ -4,6 +4,7 @@
     "name": "hb-module",
     "dependencies": [
         "/main.js",
+        "http://twitter.github.io/bootstrap/assets/js/bootstrap-typeahead.js",
         "http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"
     ],
     "operations": [
