@@ -20,7 +20,7 @@ module.exports = function (config) {
 //    });
 
     var showChange = function (id) {
-        self.link('/user', {id: id}, function (error, data) {
+        self.link('/show', {id: id}, function (error, data) {
             if (error) { throw error; }
 
             ids = [data['_id']];
@@ -30,9 +30,9 @@ module.exports = function (config) {
         });
     };
 
-    $('changeTypeahead').typeahead({
+    $('#changeTypeahead').typeahead({
         source: function (query, process) {
-            self.link('/users', {query: query}, function (error, data) {
+            self.link('/index', {query: query}, function (error, data) {
                 if (error) { throw error; }
 
                 ids = [];
