@@ -2,6 +2,7 @@ var db = require('mongodb').Db;
 var dbServer = require('mongodb').Server;
 var ObjectID = require('mongodb').ObjectID;
 var projection = {fields: {'happybonus': 1, 'person': 1}};
+var collection;
 
 var database = new db('sag-shops', new dbServer('localhost', 27017), {safe: false});
 database.open (function (error, db) {
