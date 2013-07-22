@@ -20,7 +20,7 @@ module.exports = function (config) {
 //    });
 
     var showChange = function (id) {
-        self.link('show', {id: id}, function (error, data) {
+        self.link('show', {data: {id: id}}, function (error, data) {
             if (error) { throw error; }
 
             ids = [data['_id']];
@@ -32,7 +32,7 @@ module.exports = function (config) {
 
     $('#changeTypeahead').typeahead({
         source: function (query, process) {
-            self.link('index', {query: query}, function (error, data) {
+            self.link('index', {data: query}, function (error, data) {
                 if (error) { throw error; }
 
                 ids = [];
@@ -51,7 +51,7 @@ module.exports = function (config) {
     });
 
     $('#changeForm .commit button').click(function () {
-        self.link('edit', {points: $('#changeForm .commit input').val(), id: ids[0] }, function (error, data) {
+        self.link('edit', {points: $('#changeForm .commit input').val(), data: { id: ids[0] }}, function (error, data) {
             if (error) { throw error; }
         });
     });
