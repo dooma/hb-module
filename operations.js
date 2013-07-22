@@ -29,7 +29,7 @@ exports.show = function (link) {
         } else {
             link.send(200, data);
         }
-    }
+    });
 };
 
 exports.edit = function (link) {
@@ -44,7 +44,7 @@ exports.edit = function (link) {
         } else {
             link.send(200, data);
         }
-    }
+    });
 };
 
 exports.transfer = function (link) {
@@ -59,5 +59,5 @@ exports.transfer = function (link) {
         } else {
             link.send(200, data);
         }
-    }
+    });
 };
