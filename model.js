@@ -6,7 +6,10 @@ var projection = {fields: {'happybonus': 1, 'person': 1}};
 var database = new db('sag-shops', new dbServer('localhost', 27017), {safe: false});
 database.open (function (error, db) {
     if (error) { throw error; }
-    collection = db.collection('users_happy');
+    db.collection('users_happy', function (error, coll) {
+        if (error) { throw error; }
+        collection = coll;
+    });
 });
 
 exports.getUsers = function (pattern, callback) {
