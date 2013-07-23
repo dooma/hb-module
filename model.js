@@ -1,18 +1,29 @@
-var dbClient = require('mongodb').MongoClient;
+var dbClient = require('mongodb').Db;
+var dbServer = require('mongodb').Server;
 var ObjectID = require('mongodb').ObjectID;
 var projection = {fields: {'happybonus': 1, 'person': 1}};
-var collection;
+var database = new dbClient('sag-shops', new dbServer('localhost', 27017), {safe: false});
 
-dbClient.connect('mongodb://localhost:27017/sag-shops', function (error, db) {
-    collection = db.collection('users_happy');
-    console.log(collection);
-});
+var getDb = function (callback) {
+    if (db) { return callback(null, db); }
+
+    database.open(function (error, newDb) {
+        if (error) { return callback(error) }
+
+        db = newDb;
+        callback(null, db);
+    });
+};
 
 exports.getUsers = function (pattern, callback) {
     pattern = pattern.toLowerCase().replace(/\s+/, '|');
     pattern = new RegExp(pattern);
     var query = {'person': {$exists: 1}, 'happybonus': {$exists: 1}, 'meta': pattern};
-    collection.find(query, projection).toArray(callback);
+    getDb(function (error, db) {
+        if (error) { throw error; }
+
+        db.collection.find(query, projection).toArray(callback);
+    });
 };
 exports.getUser = function (id, callback) {
     database.open (function (error, db) {
