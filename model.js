@@ -5,14 +5,14 @@ var projection = {fields: {'happybonus': 1, 'person': 1}};
 var database = new dbClient('sag-shops', new dbServer('localhost', 27017), {safe: false});
 var db;
 
-var getDb = function (callback) {
-    if (db) { return callback(null, db); }
+var getColl = function (callback) {
+    if (db) { return callback(null, db.collection('users_happy')); }
 
     database.open(function (error, newDb) {
         if (error) { return callback(error) }
 
         db = newDb;
-        callback(null, db);
+        callback(null, db.collection('users_happy'));
     });
 };
 
@@ -20,10 +20,10 @@ exports.getUsers = function (pattern, callback) {
     pattern = pattern.toLowerCase().replace(/\s+/, '|');
     pattern = new RegExp(pattern);
     var query = {'person': {$exists: 1}, 'happybonus': {$exists: 1}, 'meta': pattern};
-    getDb(function (error, db) {
+    getColl(function (error, coll) {
         if (error) { throw error; }
 
-        db.collection.find(query, projection).toArray(callback);
+        coll.find(query, projection).toArray(callback);
     });
 };
 exports.getUser = function (id, callback) {
