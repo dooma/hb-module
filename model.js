@@ -6,13 +6,13 @@ var database = new dbClient('sag-shops', new dbServer('localhost', 27017), {safe
 var db;
 
 var getColl = function (callback) {
-    if (db) { return callback(null, db.collection('users_happy')); }
+    if (db !== undefined) { return callback(null, db.collection('users_happy')); }
 
     database.open(function (error, newDb) {
         if (error) { return callback(error) }
 
         db = newDb;
-        callback(null, db.collection('users_happy'));
+        callback(null, newDb.collection('users_happy'));
     });
 };
 
