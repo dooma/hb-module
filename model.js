@@ -15,6 +15,7 @@ exports.getUsers = function (pattern, callback) {
             var query = {'person': {$exists: 1}, 'happybonus': {$exists: 1}, 'meta': pattern};
             coll.find(query, projection).toArray(callback);
         });
+        db.close();
     });
 };
 exports.getUser = function (id, callback) {
@@ -24,6 +25,7 @@ exports.getUser = function (id, callback) {
             var query = {'person': {$exists: 1}, 'happybonus': {$exists: 1}, '_id': ObjectID(id)};
             coll.findOne(query, projection, callback);
         });
+        db.close();
     });
 };
 exports.editUser = function (id, points, callback) {
@@ -33,6 +35,7 @@ exports.editUser = function (id, points, callback) {
             var query = {'_id': ObjectID(id)};
             coll.update(query, {$set: {'happybonus.points': parseInt(points)}}, callback);
         });
+        db.close();
     });
 };
 exports.transfer = function (ids, points, callback) {
@@ -63,5 +66,6 @@ exports.transfer = function (ids, points, callback) {
                 }
             });
         });
+        db.close();
     });
 };
