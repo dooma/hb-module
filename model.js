@@ -46,7 +46,7 @@ exports.editUser = function (id, points, callback) {
 };
 exports.transfer = function (ids, points, callback) {
     var convertPoints = function (points) {
-        points = points.replace(/[\D]+/g, '');
+        points = points.toString().replace(/[\D]+/g, '');
 
         if (isNaN(parseInt(points))) { return 0 };
         return parseInt(points);
@@ -60,14 +60,20 @@ exports.transfer = function (ids, points, callback) {
         if (error) { throw error; }
 
         coll.findOne(query, projection, function (error, doc) {
+            if (error) { throw error; }
+
             var diff = convertPoints(doc['happybonus']['points']) - points;
 
             if (diff < 0) { callback('User has not enough points', 'done'); }
             else {
                 coll.update(query, {$set: {'happybonus.points': diff}}, function (error, result) {
+                    if (error) { throw error; }
+
                     query = {'_id': ObjectID(ids[1])};
 
                     coll.findOne(query, projection, function(error, doc) {
+                        if (error) { throw error; }
+
                         var sum = convertPoints(doc['happybonus']['points']) + points;
                         coll.update(query, {$set: {'happybonus.points': sum}}, callback);
                     });
