@@ -27,53 +27,50 @@ exports.getUsers = function (pattern, callback) {
     });
 };
 exports.getUser = function (id, callback) {
-    database.open (function (error, db) {
+    var query = {'person': {$exists: 1}, 'happybonus': {$exists: 1}, '_id': ObjectID(id)};
+
+    getColl(function (error, coll) {
         if (error) { throw error; }
-        db.collection('users_happy', function (error, coll) {
-            var query = {'person': {$exists: 1}, 'happybonus': {$exists: 1}, '_id': ObjectID(id)};
-            coll.findOne(query, projection, callback);
-            db.close();
-        });
+
+        coll.findOne(query, projection, callback);
     });
 };
 exports.editUser = function (id, points, callback) {
-    database.open (function (error, db) {
+    var query = {'_id': ObjectID(id)};
+
+    getColl(function (error, coll) {
         if (error) { throw error; }
-        db.collection('users_happy', function (error, coll) {
-            var query = {'_id': ObjectID(id)};
-            coll.update(query, {$set: {'happybonus.points': parseInt(points)}}, callback);
-            db.close();
-        });
+
+        coll.update(query, {$set: {'happybonus.points': parseInt(points)}}, callback);
     });
 };
 exports.transfer = function (ids, points, callback) {
-    database.open (function (error, db) {
+    var convertPoints = function (points) {
+        if (isNaN(parseInt(points))) { return 0 };
+        return parseInt(points);
+    };
+
+    points = convertPoints(points);
+
+    var query = {'_id': ObjectID(ids[0])};
+
+    getColl(function (error, coll) {
         if (error) { throw error; }
-        db.collection('users_happy', function (error, coll) {
-            var convertPoints = function (points) {
-                if (isNaN(parseInt(points))) { return 0 };
-                return parseInt(points);
-            };
 
-            points = convertPoints(points);
+        coll.findOne(query, projection, function (error, doc) {
+            var diff = convertPoints(doc['happybonus']['points']) - points;
 
-            var query = {'_id': ObjectID(ids[0])};
-            coll.findOne(query, projection, function (error, doc) {
-                var diff = convertPoints(doc['happybonus']['points']) - points;
+            if (diff < 0) { callback('User has not enough points', 'done'); }
+            else {
+                coll.update(query, {$set: {'happybonus.points': diff}}, function (error, result) {
+                    query = {'_id': ObjectID(ids[1])};
 
-                if (diff < 0) { callback('User has not enough points', 'done'); }
-                else {
-                    coll.update(query, {$set: {'happybonus.points': diff}}, function (error, result) {
-                        query = {'_id': ObjectID(ids[1])};
-
-                        coll.findOne(query, projection, function(error, doc) {
-                            var sum = convertPoints(doc['happybonus']['points']) + points;
-                            coll.update(query, {$set: {'happybonus.points': sum}}, callback);
-                        });
+                    coll.findOne(query, projection, function(error, doc) {
+                        var sum = convertPoints(doc['happybonus']['points']) + points;
+                        coll.update(query, {$set: {'happybonus.points': sum}}, callback);
                     });
-                }
-            });
-            db.close();
+                });
+            }
         });
     });
 };
