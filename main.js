@@ -1,14 +1,14 @@
 module.exports = function (config) {
     var self = this;
 
-//    var hideContainers = function () {
-//        $('#changeForm, #transferForm').hide();
-//        $('.commit').hide();
-//        ids = [];
-//    };
-//
-//    hideContainers();
-//
+    var hideContainers = function () {
+        $('#changeForm, #transferForm').hide();
+        $('.commit').hide();
+        ids = [];
+    };
+
+    hideContainers();
+
 //    $('#init #change').click(function () {
 //        hideContainers();
 //        $('#changeForm').show();
@@ -24,9 +24,10 @@ module.exports = function (config) {
             if (error) { throw error; }
 
             ids = [data['_id']];
-            $('#changeForm label').val(data['person']['fname'] + ' ' + data['person']['lname']);
+            $('#changeForm label').html(data['person']['fname'] + ' ' + data['person']['lname']);
             $('#changeForm .commit input').val(data['happybonus']['points'] || 0);
             $('#changeForm .commit').show();
+            $('#changeTypeahead').hide();
         });
     };
 
@@ -51,7 +52,7 @@ module.exports = function (config) {
     });
 
     $('#changeForm .commit button').click(function () {
-        self.link('edit', {points: $('#changeForm .commit input').val(), data: { id: ids[0] }}, function (error, data) {
+        self.link('edit', {data: {points: $('#changeForm .commit input').val(), id: ids[0]}}, function (error, data) {
             if (error) { throw error; }
         });
     });

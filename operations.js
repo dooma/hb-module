@@ -23,7 +23,7 @@ exports.show = function (link) {
     }
 
     console.log(link.data)
-    model.getUser(link.data, function (error, data) {
+    model.getUser(link.data.id, function (error, data) {
         if (error) {
             link.send(400, error);
         } else {
