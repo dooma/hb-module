@@ -53,7 +53,7 @@ exports.transfer = function (link) {
         return;
     }
 
-    model.getUser(link.data.ids, link.data.points, function (error, data) {
+    model.transfer(link.data.ids, link.data.points, function (error, data) {
         if (error) {
             link.send(400, error);
         } else {

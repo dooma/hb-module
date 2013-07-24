@@ -2,7 +2,7 @@ module.exports = function (config) {
     var self = this;
 
     var hideContainers = function () {
-        $('#changeForm, #transferForm').hide();
+        $('#changeForm #transferForm').hide();
         $('.commit').hide();
         ids = [];
     };
@@ -57,19 +57,20 @@ module.exports = function (config) {
         });
     });
 
-/*    var setToFirstField = function (id) {
-        self.link('/user', {id: id}, function (error, data) {
+    var setToFirstField = function (id) {
+        self.link('show', {data: {id: id}}, function (error, data) {
             if (error) { throw error; }
 
             ids[0] = data['_id'];
-            $('#transferForm #firstTypeahead').val(data['person']['fname'] + ' ' + data['person']['lname']);
+            $('#transferContainer label').first().html(data['person']['fname'] + ' ' + data['person']['lname']);
             $('#transferForm .commit input').val(data['happybonus']['points'] || 0);
+            $('#firstTypeahead').hide();
         });
     };
 
     $('#firstTypeahead').typeahead({
         source: function (query, process) {
-            self.link('/users', {query: query}, function (error, data) {
+            self.link('index', {data: query}, function (error, data) {
                 if (error) { throw error; }
 
                 ids = [];
@@ -88,7 +89,7 @@ module.exports = function (config) {
 
     $('#secondTypeahead').typeahead({
         source: function(query, process){
-            self.link('/users', {query: query}, function (error, data) {
+            self.link('index', {data: query}, function (error, data) {
                 if (error) { throw error; }
 
                 ids = [];
@@ -106,19 +107,19 @@ module.exports = function (config) {
     });
 
     var setToSecondField = function (id) {
-        self.link('/user', {id: id}, function (error, data) {
+        self.link('show', {data: {id: id}}, function (error, data) {
             if (error) { throw error; }
 
             ids[1] = data['_id'];
-            $('#transferForm #secondTypeahead').val(data['person']['fname'] + ' ' + data['person']['lname']);
+            $('#transferContainer label').last().html(data['person']['fname'] + ' ' + data['person']['lname']);
             $('#transferForm .commit').show();
+            $('#secondTypeahead').hide();
         });
     };
 
     $('#transferForm .commit button').click(function () {
-        self.link('/transfer', {points: $('#transferForm .commit input').val(), firstId: ids[0], secondId: ids[1]}, function (error, data) {
+        self.link('transfer', {data: {points: $('#transferForm .commit input').val(), ids: [ids[0], ids[1]]}}, function (error, data) {
             if (error) { throw error; }
         });
     });
-*/
 }
