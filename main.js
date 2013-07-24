@@ -73,17 +73,17 @@ module.exports = function (config) {
             self.link('index', {data: query}, function (error, data) {
                 if (error) { throw error; }
 
-                ids = [];
+                firstIds = [];
                 users = []
                 for (var i = 0; i < data.length; ++i) {
                     users.push(data[i]['person']['fname'] + ' ' + data[i]['person']['lname'] + ' ' + (data[i]['happybonus']['points'] || 0));
-                    ids.push(data[i]['_id']);
+                    firstIds.push(data[i]['_id']);
                 }
                 return process(users);
             });
         },
         updater: function(selection){
-            setToFirstField(ids[users.indexOf(selection)]);
+            setToFirstField(firstIds[users.indexOf(selection)]);
         }
     });
 
@@ -92,17 +92,17 @@ module.exports = function (config) {
             self.link('index', {data: query}, function (error, data) {
                 if (error) { throw error; }
 
-                ids = [];
+                secondIds = [];
                 users = []
                 for (var i = 0; i < data.length; ++i) {
                     users.push(data[i]['person']['fname'] + ' ' + data[i]['person']['lname'] + ' ' + (data[i]['happybonus']['points'] || 0));
-                    ids.push(data[i]['_id']);
+                    secondIds.push(data[i]['_id']);
                 }
                 return process(users);
             });
         },
         updater: function(selection){
-            setToSecondField(ids[users.indexOf(selection)]);
+            setToSecondField(secondIds[users.indexOf(selection)]);
         }
     });
 
