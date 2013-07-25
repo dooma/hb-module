@@ -46,6 +46,8 @@ exports.editUser = function (id, points, callback) {
 };
 exports.transfer = function (ids, points, callback) {
     var convertPoints = function (points) {
+        if (typeof(points) === 'undefined') { return 0 };
+
         points = points.toString().replace(/[\D]+/g, '');
 
         if (isNaN(parseInt(points))) { return 0 };
